@@ -1,0 +1,4 @@
+#create database with database name nodeapplication
+
+
+CREATE DATABASE nodeapplication;

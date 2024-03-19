@@ -1,0 +1,336 @@
+
+Nodejs latest version download  - Linux Binaries (x64)
+https://nodejs.org/en/download/
+
+Extract the Archive:
+tar -xf node-v20.11.1-linux-x64.tar.xz
+
+Move Node.js Files:
+sudo mv node-v20.11.1-linux-x64 /usr/local/
+
+Update PATH Variable:
+
+To make the node and npm commands accessible from anywhere in your terminal, you need to update the PATH environment variable. 
+You can do this by adding the Node.js binaries directory to your PATH. 
+Edit your shell configuration file (e.g., .bashrc, .bash_profile, .zshrc, etc.) and add the following line
+
+export PATH=/usr/local/node-v20.11.1-linux-x64/bin:$PATH
+
+source ~/.bashrc
+
+node -v
+npm -v
+
+sudo apt install apache2
+
+
+-------------------------------------------------------------------
+
+install apache2 server in the machine
+
+sudo apt update
+sudo apt install apache2
+sudo ufw allow in "Apache"
+sudo systemctl status apache2
+sudo systemctl start apache2
+
+note: app.js == index.js in our project
+
+#this the  url for get the nodejs latest version
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
+ . ~/.nvm/nvm.sh
+ 
+nvm install node
+
+sudo chown -R ubuntu: www
+
+mkdir my-express-app
+ 
+cd my-express-app
+ 
+npm init -y
+ 
+nvm use 18.15.0
+nvm alias default 14.17.0
+nvm alias project-name 12.18.3
+ 
+npm install
+
+create index.js
+npm install express
+
+npm install dotenv
+
+Load environment variables in your Express.js app
+require('dotenv').config();
+
+create .env file 
+DB_HOST=hostid or url or endpoint
+process.env.DB_HOST
+ 
+
+install pm2 using npm
+npm install pm2@latest -g
+ 
+star the project using local machine for check up run the below command
+node app.js
+ 
+start the project using pm2
+pm2 start app.js
+
+
+this is used for find the port is running on which process id:
+fuser portnumber/tcp
+
+_______________________________________________________________________________________
+
+Database start
+
+refer node-application-db
+
+If mysql node package manager is not installed do the steps
+
+sudo chown -R $(whoami) ~/.npm
+sudo chown -R $(whoami) $(npm config get prefix)/{lib/node_modules,bin,share}
+sudo chown -R $(whoami) /var/www/node-application
+
+
+now execute 
+
+npm install mysql 
+
+express.js:
+const mysql = require('mysql');
+
+
+this command will show you the location of node installed 
+npm config get prefix
+
+-------------------------------------------------------------------------------------------------------------------------------------
+
+site configuration
+
+put one record in route 53 
+my site is called 
+nodeapplication.surenkumar.com
+
+run the below command in the site hosted server
+
+Enable Required Modules
+
+sudo a2enmod proxy                                                           
+                                                                                          -    Enabling module proxy.
+                                                                                               To activate the new configuration, you need to run:
+                                                                                                 systemctl restart apache2
+
+sudo a2enmod proxy_http                                                   
+                                                                                          -    Considering dependency proxy for proxy_http:
+                                                                                               Module proxy already enabled
+                                                                                               Enabling module proxy_http.
+                                                                                               To activate the new configuration, you need to run:
+																									systemctl restart apache2
+  
+sudo a2enmod proxy_balancer
+																						   -  Considering dependency proxy for proxy_balancer:
+                                                                                              Module proxy already enabled
+                                                                                              Considering dependency alias for proxy_balancer:
+                                                                                              Module alias already enabled
+                                                                                              Considering dependency slotmem_shm for proxy_balancer:
+                                                                                              Enabling module slotmem_shm.
+                                                                                              Enabling module proxy_balancer.
+                                                                                              To activate the new configuration, you need to run:
+                                                                                                systemctl restart apache2
+sudo a2enmod lbmethod_byrequests
+																						   -  Considering dependency proxy_balancer for lbmethod_byrequests:
+																							  Considering dependency proxy for proxy_balancer:
+																							  Module proxy already enabled
+																							  Considering dependency alias for proxy_balancer:
+																							  Module alias already enabled
+																							  Considering dependency slotmem_shm for proxy_balancer:
+																							  Module slotmem_shm already enabled
+																							  Module proxy_balancer already enabled
+																							  Enabling module lbmethod_byrequests.
+																							  To activate the new configuration, you need to run:
+																							  systemctl restart apache2																							
+																							  
+sudo systemctl restart apache2
+
+
+ Edit Apache Site Configuration
+ 
+ sudo nano /etc/apache2/sites-available/example.com.conf
+
+<VirtualHost *:80>
+    ServerAdmin webmaster@example.com
+    ServerName nodeapplication.s.relevatetechops.com
+    ServerAlias www.example.com
+
+    # Existing directives...
+
+    # Proxy /data requests to the app running on port 3000
+    ProxyPass / http://localhost:3000/data
+    ProxyPassReverse / http://localhost:3000/data
+
+    # Other configurations...
+</VirtualHost>
+
+
+Apply the Configuration
+
+After editing the configuration file, check for syntax errors:
+sudo apache2ctl configtest
+
+sudo systemctl restart apache2
+
+
+config symlink to sites-available to sites-enabled
+
+#ln -s <target> <link_name>
+
+Enabling site
+/etc/apache2/sites-available/
+sudo a2ensite otacon-api.conf
+
+Disabling site
+/etc/apache2/sites-enabled/
+sudo a2dissite otacon-api.conf
+
+sudo systemctl reload apache2
+
+
+https://chat.openai.com/c/197faad8-d75c-4f0d-8a16-3dd3705e6ec4
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+ssl certificate process
+
+sudo apt-get update
+sudo apt-get install python3-certbot-apache
+
+sudo systemctl restart certbot
+
+sudo certbot certonly --apache -d nodeapplication.s.relevatetechops.com
+
+please give the mail address add type 
+y
+y 
+2 times
+
+sudo systemctl restart apache2
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+after creating ssl certificate
+
+/etc/letsencrypt/live/nodeapplication.s.relevatetechops.com
+
+certificats are here <VirtualHost *:443>
+    ServerName nodeapplication.s.relevatetechops.com
+
+    DocumentRoot /var/www/html/your_site
+
+    SSLEngine on
+    SSLCertificateFile /etc/letsencrypt/live/nodeapplication.s.relevatetechops.com/fullchain.pem
+    SSLCertificateKeyFile /etc/letsencrypt/live/nodeapplication.s.relevatetechops.com/privkey.pem
+
+    # API call configuration
+    ProxyPass /api http://localhost:3000/api
+    ProxyPassReverse /api http://localhost:3000/api
+
+    # Other SSL configuration options (optional)
+    SSLProtocol all -SSLv3 -TLSv1 -TLSv1.1
+    SSLCipherSuite ...
+    SSLHonorCipherOrder on
+    SSLSessionTickets off
+</VirtualHost>
+
+Enable SSL Module
+
+sudo a2enmod ssl                      
+                                                                                       -  Considering dependency setenvif for ssl:
+                                                                                          Module setenvif already enabled
+                                                                                          Considering dependency mime for ssl:
+                                                                                          Module mime already enabled
+                                                                                          Considering dependency socache_shmcb for ssl:
+                                                                                          Enabling module socache_shmcb.
+                                                                                          Enabling module ssl.
+                                                                                          See /usr/share/doc/apache2/README.Debian.gz on how to configure SSL and create self-signed certificates.
+                                                                                          To activate the new configuration, you need to run:
+                                                                                            sudo systemctl restart apache2
+
+
+Enable Proxy and Proxy HTTP Modules
+
+
+
+sudo a2enmod proxy                                                        -  Module proxy already enabled
+sudo a2enmod proxy_http                        
+                                                                                       -  Considering dependency proxy for proxy_http:
+                                                                                          Module proxy already enabled
+                                                                                          Module proxy_http already enabled
+																						  
+																				
+sudo systemctl restart apache2						
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+if this type of error occur:
+
+https://askubuntu.com/questions/1096667/apache2-config-variables-not-defined
+
+AH00111: Config variable ${APACHE_LOCK_DIR} is not defined
+apache2: Syntax error on line 80 of /etc/apache2/apache2.conf: DefaultRuntimeDir must be a valid directory, absolute or relative to ServerRoot
+
+source /etc/apache2/envvars
+
+
+
+------------------------------------------------------------------------------------------------------------------------------------
+
+FRONTEND
+
+: Set Up Your Development Environment
+
+nodejs and npm already installed
+
+mkdir node-frontend-application
+
+Install Create React App
+npm install -g create-react-app
+
+Create a New ReactApplication
+npx create-react-app my-react-app
+
+Navigate to your project Directory
+cd my-react-app
+
+Start the Development Server
+npm start
+
+
+-----------------------------------------------------------------------
+
+cors policy frontend-application:
+
+fetch('http://localhost:3001/api/data')
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error('Error fetching data:', error));
+
+
+CORS Middleware: (express js)
+
+const express = require('express');
+const cors = require('cors');
+const app = express();
+
+app.use(cors());
+
+// Your API routes here
+
+app.listen(3000, () => {
+  console.log('API server is running on port 3000');
+});
+
+-----------------------------------------------------------------------------------------------------
+

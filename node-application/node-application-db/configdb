@@ -1,0 +1,7 @@
+connection_name - node-application
+
+host - node-application-db.cl3fgjuvseqm.ap-south-1.rds.amazonaws.com
+username - admin
+password - node-application-123
+port - 3306
+

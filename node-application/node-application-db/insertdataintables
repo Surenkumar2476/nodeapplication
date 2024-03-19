@@ -1,0 +1,4 @@
+#insert into table Persons
+
+INSERT INTO Persons (PersonID, LastName, FirstName, Address, City)
+VALUES (1, 'Sellamuthu', 'Surenkumar', '15, Gopal Street, N.K.Nagar', 'Tindivanam');
